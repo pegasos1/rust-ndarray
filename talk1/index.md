@@ -311,13 +311,12 @@ Ndarray operations are efficient when they access the underlying data as a slice
   + ...but we have no operations that dynamically change the number of axes of an array.
 + General signed strides per axis representation
   + Can represent different memory layouts
-  + Can represent more than just rectangular cut views
   + ...but some operations must have multiple cases depending on layout
 
 
 # End
 
-+ ndarray is about the data structure.
++ ndarray is focused on the data structure.
 + We want to do the basics right and make it easy to extend.
 
 <!-- vim: sts=4 sw=4 et
