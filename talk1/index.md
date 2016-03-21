@@ -1,7 +1,7 @@
 % ndarray
 
 <br><br>
-presented by bluss
+presented by Ulrik Sverdrup (bluss)
 
 22 March 2016
 
@@ -309,7 +309,7 @@ Ndarray operations are efficient when they access the underlying data as a slice
   + The low dimensional views are lightweight
   + and easy to see through for the optimizing compiler
   + ...but we have no operations that dynamically change the number of axes of an array.
-+ General signed strides per axis representation
++ A signed stride per axis
   + Can represent different memory layouts
   + ...but some operations must have multiple cases depending on layout
 
@@ -318,6 +318,12 @@ Ndarray operations are efficient when they access the underlying data as a slice
 
 + ndarray is focused on the data structure.
 + We want to do the basics right and make it easy to extend.
++ For more information, see our [github][gh] or the [ndarray documentation][doc].
+
+
+
+[gh]: https://github.com/bluss/rust-ndarray
+[doc]: https://bluss.github.io/rust-ndarray/
 
 <!-- vim: sts=4 sw=4 et
 -->
