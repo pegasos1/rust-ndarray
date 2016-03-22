@@ -105,3 +105,10 @@ li {
 /* A more saturated color for comments */
 pre.rust .comment { color: #242859; }
 pre.rust .ident { color: #111; }
+
+#pagenr {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 20px;
+}

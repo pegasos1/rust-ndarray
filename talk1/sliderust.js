@@ -27,6 +27,12 @@ window.addEventListener('load', function () {
         document.body.appendChild(x);
     });
 
+    /* page number */
+    var pagenr = document.createElement('span');
+    pagenr.id = "pagenr";
+    pagenr.textContent = "page number";
+    document.body.appendChild(pagenr);
+
     var sections = document.getElementsByTagName('section');
     var current = 0;
     function update() {
@@ -38,6 +44,13 @@ window.addEventListener('load', function () {
         if (current >= sections.length)
             current = sections.length - 1;
         sections[current].className += ' current';
+
+        if (current == 0) {
+            pagenr.textContent = '';
+        } else {
+            pagenr.textContent = '' + current;
+        }
+
     }
 
     update();
