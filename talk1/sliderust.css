@@ -101,3 +101,7 @@ li::before {
 
 li {
 }
+
+/* A more saturated color for comments */
+pre.rust .comment { color: #242859; }
+pre.rust .ident { color: #111; }
