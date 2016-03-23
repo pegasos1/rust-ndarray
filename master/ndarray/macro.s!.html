@@ -7,7 +7,7 @@
     <meta name="description" content="API documentation for the Rust `s!` macro in crate `ndarray`.">
     <meta name="keywords" content="rust, rustlang, rust-lang, s!">
 
-    <title>ndarray 0.4.4 - ndarray::s! - Rust</title>
+    <title>ndarray 0.4.5 - ndarray::s! - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
@@ -46,7 +46,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-6047' class='srclink' href='../src/ndarray/src/si.rs.html#125-145' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-5985' class='srclink' href='../src/ndarray/si.rs.html#127-152' title='goto source code'>[src]</a></span></h1>
 <pre class='rust macro'>
 <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>s</span> {
     (<span class='kw-2'>@</span><span class='ident'>as_expr</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>e</span>:<span class='ident'>expr</span>) <span class='op'>=&gt;</span> { ... };
@@ -67,10 +67,12 @@ It is converted into a slice argument with type <code>&amp;[Si; N]</code>.</p>
 the end of the axis. Strides are also signed and may be negative, but
 must not be zero.</p>
 
-<p>For example, if an array has two axes, the slice argument is passed as
-type <code>&amp;[Si; 2]</code>.</p>
+<p>For example <code>s![0..4;2, 1..5]</code> is a slice of rows 0..4 with step size 2,
+and columns 1..5 with default step size 1. The slice would have
+shape <code>[2, 4]</code>.</p>
 
-<p>For example <code>s![a..b;c, d..e]</code>
+<p>If an array has two axes, the slice argument is passed as
+type <code>&amp;[Si; 2]</code>.  The macro expansion of <code>s![a..b;c, d..e]</code>
 is equivalent to <code>&amp;[Si(a, Some(b), c), Si(d, Some(e), 1)]</code>.</p>
 
 <pre class='rust rust-example-rendered'>

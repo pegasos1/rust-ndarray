@@ -7,7 +7,7 @@
     <meta name="description" content="API documentation for the Rust `AsBlas` trait in crate `ndarray`.">
     <meta name="keywords" content="rust, rustlang, rust-lang, AsBlas">
 
-    <title>ndarray 0.4.4 - ndarray::blas::AsBlas - Rust</title>
+    <title>ndarray 0.4.5 - ndarray::blas::AsBlas - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../../main.css">
@@ -46,7 +46,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-424' class='srclink' href='../../src/ndarray/src/blas.rs.html#142-224' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-424' class='srclink' href='../../src/ndarray/blas.rs.html#142-224' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait AsBlas&lt;A, S, D&gt; {
     fn <a href='#tymethod.blas_checked' class='fnname'>blas_checked</a>(&amp;mut self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../../ndarray/blas/struct.BlasArrayViewMut.html' title='ndarray::blas::BlasArrayViewMut'>BlasArrayViewMut</a>&lt;A, D&gt;, <a class='struct' href='../../ndarray/struct.ShapeError.html' title='ndarray::ShapeError'>ShapeError</a>&gt; <span class='where'>where S: <a class='trait' href='../../ndarray/trait.DataOwned.html' title='ndarray::DataOwned'>DataOwned</a> + <a class='trait' href='../../ndarray/trait.DataMut.html' title='ndarray::DataMut'>DataMut</a>, A: <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a></span>;
     fn <a href='#tymethod.blas_view_checked' class='fnname'>blas_view_checked</a>(&amp;self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../../ndarray/blas/struct.BlasArrayView.html' title='ndarray::blas::BlasArrayView'>BlasArrayView</a>&lt;A, D&gt;, <a class='struct' href='../../ndarray/struct.ShapeError.html' title='ndarray::ShapeError'>ShapeError</a>&gt; <span class='where'>where S: <a class='trait' href='../../ndarray/trait.Data.html' title='ndarray::Data'>Data</a></span>;

@@ -7,7 +7,7 @@
     <meta name="description" content="API documentation for the Rust `ndarray` crate.">
     <meta name="keywords" content="rust, rustlang, rust-lang, ndarray">
 
-    <title>ndarray 0.4.4 - ndarray - Rust</title>
+    <title>ndarray 0.4.5 - ndarray - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
@@ -46,7 +46,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-0' class='srclink' href='../src/ndarray/src/lib.rs.html#8-728' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-0' class='srclink' href='../src/ndarray/lib.rs.html#8-754' title='goto source code'>[src]</a></span></h1>
 <div class='docblock'><p>The <code>ndarray</code> crate provides an N-dimensional container for general elements
 and for numerics.</p>
 
@@ -93,7 +93,7 @@ but alpha releases break at will.</li>
 or array view. Especially if it&#39;s a binary operation, which
 needs matching memory layout to be efficient (with some exceptions).</li>
 <li>Arithmetic optimizes very well if the arrays are have contiguous inner dimension.</li>
-<li>The callback based methods like <code>.mapv()</code>, <code>.applyv()</code> and
+<li>The higher order functions like <code>.map()</code>, <code>.map_inplace()</code> and
 <code>.zip_mut_with()</code> are the most efficient ways to
 perform single traversal and lock step traversal respectively.</li>
 <li><code>.iter()</code> is efficient for c-contiguous arrays.</li>
@@ -195,6 +195,24 @@ and yields mutable views of the specified size on this axis.</p>
                     </tr>
                 
                     <tr class=' module-item'>
+                        <td><a class='struct' href='struct.AxisIter.html'
+                               title='ndarray::AxisIter'>AxisIter</a></td>
+                        <td class='docblock short'>
+                             <p>An iterator that traverses over an axis and
+and yields each subview.</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='struct' href='struct.AxisIterMut.html'
+                               title='ndarray::AxisIterMut'>AxisIterMut</a></td>
+                        <td class='docblock short'>
+                             <p>An iterator that traverses over an axis and
+and yields each subview (mutable)</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
                         <td><a class='struct' href='struct.Elements.html'
                                title='ndarray::Elements'>Elements</a></td>
                         <td class='docblock short'>
@@ -249,24 +267,6 @@ and yields each inner row.</p>
                         <td class='docblock short'>
                              <p>An iterator that traverses over all dimensions but the innermost,
 and yields each inner row (mutable).</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.OuterIter.html'
-                               title='ndarray::OuterIter'>OuterIter</a></td>
-                        <td class='docblock short'>
-                             <p>An iterator that traverses over the outermost dimension
-and yields each subview.</p>
-                        </td>
-                    </tr>
-                
-                    <tr class=' module-item'>
-                        <td><a class='struct' href='struct.OuterIterMut.html'
-                               title='ndarray::OuterIterMut'>OuterIterMut</a></td>
-                        <td class='docblock short'>
-                             <p>An iterator that traverses over the outermost dimension
-and yields each subview (mutable).</p>
                         </td>
                     </tr>
                 
@@ -560,6 +560,22 @@ and yields each subview (mutable).</p>
                                title='ndarray::Ixs'>Ixs</a></td>
                         <td class='docblock short'>
                              <p>Array index type (signed)</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='type' href='type.OuterIter.html'
+                               title='ndarray::OuterIter'>OuterIter</a></td>
+                        <td class='docblock short'>
+                            [<em class='stab deprecated'>Deprecated</em>] <p><strong><em>Deprecated:</em></strong> Type renamed to <code>AxisIter</code>.</p>
+                        </td>
+                    </tr>
+                
+                    <tr class=' module-item'>
+                        <td><a class='type' href='type.OuterIterMut.html'
+                               title='ndarray::OuterIterMut'>OuterIterMut</a></td>
+                        <td class='docblock short'>
+                            [<em class='stab deprecated'>Deprecated</em>] <p><strong><em>Deprecated:</em></strong> Type renamed to <code>AxisIterMut</code>.</p>
                         </td>
                     </tr>
                 

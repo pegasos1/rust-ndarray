@@ -7,7 +7,7 @@
     <meta name="description" content="API documentation for the Rust `ArrayBase` struct in crate `ndarray`.">
     <meta name="keywords" content="rust, rustlang, rust-lang, ArrayBase">
 
-    <title>ndarray 0.4.4 - ndarray::ArrayBase - Rust</title>
+    <title>ndarray 0.4.5 - ndarray::ArrayBase - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
@@ -46,7 +46,7 @@
             <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                 [<span class='inner'>&#x2212;</span>]
             </a>
-        </span><a id='src-2410' class='srclink' href='../src/ndarray/src/lib.rs.html#413-425' title='goto source code'>[src]</a></span></h1>
+        </span><a id='src-2418' class='srclink' href='../src/ndarray/lib.rs.html#418-430' title='goto source code'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct ArrayBase&lt;S, D&gt; <span class='where'>where S: <a class='trait' href='../ndarray/trait.Data.html' title='ndarray::Data'>Data</a></span> {
     // some fields omitted
 }</pre><div class='docblock'><p>An <em>N</em>-dimensional array.</p>
@@ -109,7 +109,7 @@ a 1D array, <code>(Ix, Ix)</code> for a 2D array etc. The <code>D</code> type is
 for element indices in <code>.get()</code> and <code>array[index]</code>. The dimension type <code>Vec&lt;Ix&gt;</code>
 allows a dynamic number of axes.</p>
 
-<p>The default memory order of an array is <em>row major</em> order (a.k.a ”c” order),
+<p>The default memory order of an array is <em>row major</em> order (a.k.a “c” order),
 where each row is contiguous in memory.
 A <em>column major</em> (a.k.a. “f” or fortran) memory order array has
 columns (or, in general, the outermost axis) with contiguous elements.</p>
@@ -550,7 +550,7 @@ is a row of 3 elements (and there are 2 × 2 = 4 rows in total).</p>
 and yields each inner row.</p>
 
 <p>Iterator element is <code>ArrayViewMut&lt;A, Ix&gt;</code> (1D read-write array view).</p>
-</div><h4 id='method.outer_iter' class='method'><code>fn <a href='#method.outer_iter' class='fnname'>outer_iter</a>(&amp;self) -&gt; <a class='struct' href='../ndarray/struct.OuterIter.html' title='ndarray::OuterIter'>OuterIter</a>&lt;A, D::Smaller&gt; <span class='where'>where D: <a class='trait' href='../ndarray/trait.RemoveAxis.html' title='ndarray::RemoveAxis'>RemoveAxis</a></span></code></h4>
+</div><h4 id='method.outer_iter' class='method'><code>fn <a href='#method.outer_iter' class='fnname'>outer_iter</a>(&amp;self) -&gt; <a class='struct' href='../ndarray/struct.AxisIter.html' title='ndarray::AxisIter'>AxisIter</a>&lt;A, D::Smaller&gt; <span class='where'>where D: <a class='trait' href='../ndarray/trait.RemoveAxis.html' title='ndarray::RemoveAxis'>RemoveAxis</a></span></code></h4>
 <div class='docblock'><p>Return an iterator that traverses over the outermost dimension
 and yields each subview.</p>
 
@@ -570,25 +570,28 @@ is a 2 × 3 subview (and there are 2 in total).</p>
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>iter</span> <span class='op'>=</span> <span class='ident'>a</span>.<span class='ident'>outer_iter</span>();
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>iter</span>.<span class='ident'>next</span>().<span class='ident'>unwrap</span>(), <span class='ident'>a</span>.<span class='ident'>subview</span>(<span class='ident'>Axis</span>(<span class='number'>0</span>), <span class='number'>0</span>));
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>iter</span>.<span class='ident'>next</span>().<span class='ident'>unwrap</span>(), <span class='ident'>a</span>.<span class='ident'>subview</span>(<span class='ident'>Axis</span>(<span class='number'>0</span>), <span class='number'>1</span>));</pre>
-</div><h4 id='method.outer_iter_mut' class='method'><code>fn <a href='#method.outer_iter_mut' class='fnname'>outer_iter_mut</a>(&amp;mut self) -&gt; <a class='struct' href='../ndarray/struct.OuterIterMut.html' title='ndarray::OuterIterMut'>OuterIterMut</a>&lt;A, D::Smaller&gt; <span class='where'>where S: <a class='trait' href='../ndarray/trait.DataMut.html' title='ndarray::DataMut'>DataMut</a>, D: <a class='trait' href='../ndarray/trait.RemoveAxis.html' title='ndarray::RemoveAxis'>RemoveAxis</a></span></code></h4>
+</div><h4 id='method.outer_iter_mut' class='method'><code>fn <a href='#method.outer_iter_mut' class='fnname'>outer_iter_mut</a>(&amp;mut self) -&gt; <a class='struct' href='../ndarray/struct.AxisIterMut.html' title='ndarray::AxisIterMut'>AxisIterMut</a>&lt;A, D::Smaller&gt; <span class='where'>where S: <a class='trait' href='../ndarray/trait.DataMut.html' title='ndarray::DataMut'>DataMut</a>, D: <a class='trait' href='../ndarray/trait.RemoveAxis.html' title='ndarray::RemoveAxis'>RemoveAxis</a></span></code></h4>
 <div class='docblock'><p>Return an iterator that traverses over the outermost dimension
 and yields each subview.</p>
 
 <p>Iterator element is <code>ArrayViewMut&lt;A, D::Smaller&gt;</code> (read-write array view).</p>
-</div><h4 id='method.axis_iter' class='method'><code>fn <a href='#method.axis_iter' class='fnname'>axis_iter</a>(&amp;self, axis: <a class='struct' href='../ndarray/struct.Axis.html' title='ndarray::Axis'>Axis</a>) -&gt; <a class='struct' href='../ndarray/struct.OuterIter.html' title='ndarray::OuterIter'>OuterIter</a>&lt;A, D::Smaller&gt; <span class='where'>where D: <a class='trait' href='../ndarray/trait.RemoveAxis.html' title='ndarray::RemoveAxis'>RemoveAxis</a></span></code></h4>
+</div><h4 id='method.axis_iter' class='method'><code>fn <a href='#method.axis_iter' class='fnname'>axis_iter</a>(&amp;self, axis: <a class='struct' href='../ndarray/struct.Axis.html' title='ndarray::Axis'>Axis</a>) -&gt; <a class='struct' href='../ndarray/struct.AxisIter.html' title='ndarray::AxisIter'>AxisIter</a>&lt;A, D::Smaller&gt; <span class='where'>where D: <a class='trait' href='../ndarray/trait.RemoveAxis.html' title='ndarray::RemoveAxis'>RemoveAxis</a></span></code></h4>
 <div class='docblock'><p>Return an iterator that traverses over <code>axis</code>
 and yields each subview along it.</p>
 
-<p>For example, in a 2 × 2 × 3 array, with <code>axis</code> equal to 1,
+<p>For example, in a 3 × 5 × 5 array, with <code>axis</code> equal to <code>Axis(2)</code>,
 the iterator element
-is a 2 × 3 subview (and there are 2 in total).</p>
+is a 3 × 5 subview (and there are 5 in total), as shown
+in the picture below.</p>
 
 <p>Iterator element is <code>ArrayView&lt;A, D::Smaller&gt;</code> (read-only array view).</p>
 
 <p>See <a href="#subviews"><em>Subviews</em></a> for full documentation.</p>
 
 <p><strong>Panics</strong> if <code>axis</code> is out of bounds.</p>
-</div><h4 id='method.axis_iter_mut' class='method'><code>fn <a href='#method.axis_iter_mut' class='fnname'>axis_iter_mut</a>(&amp;mut self, axis: <a class='struct' href='../ndarray/struct.Axis.html' title='ndarray::Axis'>Axis</a>) -&gt; <a class='struct' href='../ndarray/struct.OuterIterMut.html' title='ndarray::OuterIterMut'>OuterIterMut</a>&lt;A, D::Smaller&gt; <span class='where'>where S: <a class='trait' href='../ndarray/trait.DataMut.html' title='ndarray::DataMut'>DataMut</a>, D: <a class='trait' href='../ndarray/trait.RemoveAxis.html' title='ndarray::RemoveAxis'>RemoveAxis</a></span></code></h4>
+
+<p><img src="axis_iter.svg" height="250px"></p>
+</div><h4 id='method.axis_iter_mut' class='method'><code>fn <a href='#method.axis_iter_mut' class='fnname'>axis_iter_mut</a>(&amp;mut self, axis: <a class='struct' href='../ndarray/struct.Axis.html' title='ndarray::Axis'>Axis</a>) -&gt; <a class='struct' href='../ndarray/struct.AxisIterMut.html' title='ndarray::AxisIterMut'>AxisIterMut</a>&lt;A, D::Smaller&gt; <span class='where'>where S: <a class='trait' href='../ndarray/trait.DataMut.html' title='ndarray::DataMut'>DataMut</a>, D: <a class='trait' href='../ndarray/trait.RemoveAxis.html' title='ndarray::RemoveAxis'>RemoveAxis</a></span></code></h4>
 <div class='docblock'><p>Return an iterator that traverses over <code>axis</code>
 and yields each mutable subview along it.</p>
 
@@ -870,8 +873,8 @@ The array is updated with the new values.</p>
                    [<span class='op'>-</span><span class='number'>1.</span>, <span class='number'>2.</span>]]);
 <span class='ident'>a</span>.<span class='ident'>mapv_inplace</span>(<span class='ident'>f32</span>::<span class='ident'>exp</span>);
 <span class='macro'>assert</span><span class='macro'>!</span>(
-    <span class='ident'>a</span>.<span class='ident'>allclose</span>(<span class='kw-2'>&amp;</span><span class='ident'>arr2</span>(<span class='kw-2'>&amp;</span>[[<span class='number'>1.00000</span>, <span class='number'>2.71828</span>],
-                       [<span class='number'>0.36788</span>, <span class='number'>7.38906</span>]]), <span class='number'>1e-5</span>)
+    <span class='ident'>a</span>.<span class='ident'>all_close</span>(<span class='kw-2'>&amp;</span><span class='ident'>arr2</span>(<span class='kw-2'>&amp;</span>[[<span class='number'>1.00000</span>, <span class='number'>2.71828</span>],
+                        [<span class='number'>0.36788</span>, <span class='number'>7.38906</span>]]), <span class='number'>1e-5</span>)
 );</pre>
 </div><h4 id='method.visit' class='method'><code>fn <a href='#method.visit' class='fnname'>visit</a>&lt;'a, F&gt;(&amp;'a self, f: F) <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnMut.html' title='core::ops::FnMut'>FnMut</a>(&amp;'a A), A: 'a</span></code></h4>
 <div class='docblock'><p>Visit each element in the array by calling <code>f</code> by reference
@@ -917,8 +920,18 @@ on each element.</p>
     <span class='ident'>a</span>.<span class='ident'>mean</span>(<span class='ident'>Axis</span>(<span class='number'>0</span>)) <span class='op'>==</span> <span class='ident'>aview1</span>(<span class='kw-2'>&amp;</span>[<span class='number'>2.0</span>, <span class='number'>3.0</span>]) <span class='op'>&amp;&amp;</span>
     <span class='ident'>a</span>.<span class='ident'>mean</span>(<span class='ident'>Axis</span>(<span class='number'>1</span>)) <span class='op'>==</span> <span class='ident'>aview1</span>(<span class='kw-2'>&amp;</span>[<span class='number'>1.5</span>, <span class='number'>3.5</span>])
 );</pre>
-</div><h4 id='method.allclose' class='method'><code>fn <a href='#method.allclose' class='fnname'>allclose</a>&lt;S2&gt;(&amp;self, rhs: &amp;<a class='struct' href='../ndarray/struct.ArrayBase.html' title='ndarray::ArrayBase'>ArrayBase</a>&lt;S2, D&gt;, tol: A) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a> <span class='where'>where A: <a class='trait' href='http://rust-num.github.io/num/num/traits/trait.Float.html' title='num::traits::Float'>Float</a>, S2: <a class='trait' href='../ndarray/trait.Data.html' title='ndarray::Data'>Data</a>&lt;Elem=A&gt;</span></code></h4>
+</div><h4 id='method.all_close' class='method'><code>fn <a href='#method.all_close' class='fnname'>all_close</a>&lt;S2, E&gt;(&amp;self, rhs: &amp;<a class='struct' href='../ndarray/struct.ArrayBase.html' title='ndarray::ArrayBase'>ArrayBase</a>&lt;S2, E&gt;, tol: A) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a> <span class='where'>where A: <a class='trait' href='http://rust-num.github.io/num/num/traits/trait.Float.html' title='num::traits::Float'>Float</a>, S2: <a class='trait' href='../ndarray/trait.Data.html' title='ndarray::Data'>Data</a>&lt;Elem=A&gt;, E: <a class='trait' href='../ndarray/trait.Dimension.html' title='ndarray::Dimension'>Dimension</a></span></code></h4>
 <div class='docblock'><p>Return <code>true</code> if the arrays&#39; elementwise differences are all within
+the given absolute tolerance, <code>false</code> otherwise.</p>
+
+<p>If their shapes disagree, <code>rhs</code> is broadcast to the shape of <code>self</code>.</p>
+
+<p><strong>Panics</strong> if broadcasting to the same shape isn’t possible.</p>
+</div><h4 id='method.allclose' class='method'><code>fn <a href='#method.allclose' class='fnname'>allclose</a>&lt;S2&gt;(&amp;self, rhs: &amp;<a class='struct' href='../ndarray/struct.ArrayBase.html' title='ndarray::ArrayBase'>ArrayBase</a>&lt;S2, D&gt;, tol: A) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a> <span class='where'>where A: <a class='trait' href='http://rust-num.github.io/num/num/traits/trait.Float.html' title='num::traits::Float'>Float</a>, S2: <a class='trait' href='../ndarray/trait.Data.html' title='ndarray::Data'>Data</a>&lt;Elem=A&gt;</span></code></h4>
+<div class='stability'><em class='stab deprecated'>Deprecated<p>: Replaced by .all_close() which has clearer error cases</p>
+</em></div><div class='docblock'><p><strong><em>Deprecated: Replaced by .all_close()</em></strong></p>
+
+<p>Return <code>true</code> if the arrays&#39; elementwise differences are all within
 the given absolute tolerance.<br>
 Return <code>false</code> otherwise, or if the shapes disagree.</p>
 </div></div><h3 class='impl'><code>impl&lt;A, S&gt; <a class='struct' href='../ndarray/struct.ArrayBase.html' title='ndarray::ArrayBase'>ArrayBase</a>&lt;S, <a class='type' href='../ndarray/type.Ix.html' title='ndarray::Ix'>Ix</a>&gt; <span class='where'>where S: <a class='trait' href='../ndarray/trait.Data.html' title='ndarray::Data'>Data</a>&lt;Elem=A&gt;</span></code></h3><div class='impl-items'><h4 id='method.dot' class='method'><code>fn <a href='#method.dot' class='fnname'>dot</a>&lt;S2&gt;(&amp;self, rhs: &amp;<a class='struct' href='../ndarray/struct.ArrayBase.html' title='ndarray::ArrayBase'>ArrayBase</a>&lt;S2, <a class='type' href='../ndarray/type.Ix.html' title='ndarray::Ix'>Ix</a>&gt;) -&gt; A <span class='where'>where S2: <a class='trait' href='../ndarray/trait.Data.html' title='ndarray::Data'>Data</a>&lt;Elem=A&gt;, A: <a class='trait' href='../ndarray/trait.LinalgScalar.html' title='ndarray::LinalgScalar'>LinalgScalar</a></span></code></h4>
