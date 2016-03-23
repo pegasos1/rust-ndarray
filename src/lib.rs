@@ -47,7 +47,7 @@
 //!     or array view. Especially if it's a binary operation, which
 //!     needs matching memory layout to be efficient (with some exceptions).
 //!   + Arithmetic optimizes very well if the arrays are have contiguous inner dimension.
-//!   + The callback based methods like ``.mapv()``, ``.applyv()`` and
+//!   + The higher order functions like ``.map()``, ``.map_inplace()`` and
 //!     ``.zip_mut_with()`` are the most efficient ways to
 //!     perform single traversal and lock step traversal respectively.
 //!   + ``.iter()`` is efficient for c-contiguous arrays.
@@ -109,10 +109,15 @@ use iterators::Baseiter;
 pub use iterators::{
     InnerIter,
     InnerIterMut,
-    OuterIter,
-    OuterIterMut,
+    AxisIter,
+    AxisIterMut,
     AxisChunksIter,
     AxisChunksIterMut,
+};
+#[allow(deprecated)]
+pub use iterators::{
+    OuterIter,
+    OuterIterMut,
 };
 
 pub use arraytraits::AsArray;
@@ -245,7 +250,7 @@ pub type Ixs = isize;
 /// for element indices in `.get()` and `array[index]`. The dimension type `Vec<Ix>`
 /// allows a dynamic number of axes.
 ///
-/// The default memory order of an array is *row major* order (a.k.a ”c” order),
+/// The default memory order of an array is *row major* order (a.k.a “c” order),
 /// where each row is contiguous in memory.
 /// A *column major* (a.k.a. “f” or fortran) memory order array has
 /// columns (or, in general, the outermost axis) with contiguous elements.
@@ -511,6 +516,27 @@ impl<A, S, D> ArrayBase<S, D>
         }
     }
 
+    #[inline]
+    fn broadcast_unwrap<E>(&self, dim: E) -> ArrayView<A, E>
+        where E: Dimension,
+    {
+        #[cold]
+        #[inline(never)]
+        fn broadcast_panic<D, E>(from: &D, to: &E) -> !
+            where D: Dimension,
+                  E: Dimension,
+        {
+            panic!("ndarray: could not broadcast array from shape: {:?} to: {:?}",
+                   from.slice(), to.slice())
+        }
+
+        match self.broadcast(dim.clone()) {
+            Some(it) => it,
+            None => broadcast_panic(&self.dim, &dim),
+        }
+    }
+
+
     /// Apply closure `f` to each element in the array, in whatever
     /// order is the fastest to visit.
     fn unordered_foreach_mut<F>(&mut self, mut f: F)
@@ -604,7 +630,7 @@ impl<'a, A, D> ArrayBase<ViewRepr<&'a A>, D>
     /// Return an outer iterator for this view.
     #[doc(hidden)] // not official
     #[cfg_attr(has_deprecated, deprecated(note="This method will be replaced."))]
-    pub fn into_outer_iter(self) -> OuterIter<'a, A, D::Smaller>
+    pub fn into_outer_iter(self) -> AxisIter<'a, A, D::Smaller>
         where D: RemoveAxis,
     {
         iterators::new_outer_iter(self)
@@ -668,7 +694,7 @@ impl<'a, A, D> ArrayBase<ViewRepr<&'a mut A>, D>
     /// Return an outer iterator for this view.
     #[doc(hidden)] // not official
     #[cfg_attr(has_deprecated, deprecated(note="This method will be replaced."))]
-    pub fn into_outer_iter(self) -> OuterIterMut<'a, A, D::Smaller>
+    pub fn into_outer_iter(self) -> AxisIterMut<'a, A, D::Smaller>
         where D: RemoveAxis,
     {
         iterators::new_outer_iter_mut(self)

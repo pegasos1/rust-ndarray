@@ -26,8 +26,8 @@ use {
     IndexedMut,
     InnerIter,
     InnerIterMut,
-    OuterIter,
-    OuterIterMut,
+    AxisIter,
+    AxisIterMut,
 };
 
 impl<A, S, D> ArrayBase<S, D> where S: Data<Elem=A>, D: Dimension
@@ -261,6 +261,15 @@ impl<A, S, D> ArrayBase<S, D> where S: Data<Elem=A>, D: Dimension
         &mut *self.ptr.offset(off)
     }
 
+    // `get` for zero-dimensional arrays
+    // panics if dimension is not zero. otherwise an element is always present.
+    fn get_0d(&self) -> &A {
+        assert!(self.ndim() == 0);
+        unsafe {
+            &*self.as_ptr()
+        }
+    }
+
     // `uget` for one-dimensional arrays
     unsafe fn uget_1d(&self, i: Ix) -> &A {
         debug_assert!(self.ndim() <= 1);
@@ -415,7 +424,7 @@ impl<A, S, D> ArrayBase<S, D> where S: Data<Elem=A>, D: Dimension
     /// assert_eq!(iter.next().unwrap(), a.subview(Axis(0), 1));
     /// ```
     #[allow(deprecated)]
-    pub fn outer_iter(&self) -> OuterIter<A, D::Smaller>
+    pub fn outer_iter(&self) -> AxisIter<A, D::Smaller>
         where D: RemoveAxis,
     {
         self.view().into_outer_iter()
@@ -426,7 +435,7 @@ impl<A, S, D> ArrayBase<S, D> where S: Data<Elem=A>, D: Dimension
     ///
     /// Iterator element is `ArrayViewMut<A, D::Smaller>` (read-write array view).
     #[allow(deprecated)]
-    pub fn outer_iter_mut(&mut self) -> OuterIterMut<A, D::Smaller>
+    pub fn outer_iter_mut(&mut self) -> AxisIterMut<A, D::Smaller>
         where S: DataMut,
               D: RemoveAxis,
     {
@@ -436,16 +445,19 @@ impl<A, S, D> ArrayBase<S, D> where S: Data<Elem=A>, D: Dimension
     /// Return an iterator that traverses over `axis`
     /// and yields each subview along it.
     ///
-    /// For example, in a 2 × 2 × 3 array, with `axis` equal to 1,
+    /// For example, in a 3 × 5 × 5 array, with `axis` equal to `Axis(2)`,
     /// the iterator element
-    /// is a 2 × 3 subview (and there are 2 in total).
+    /// is a 3 × 5 subview (and there are 5 in total), as shown
+    /// in the picture below.
     ///
     /// Iterator element is `ArrayView<A, D::Smaller>` (read-only array view).
     ///
     /// See [*Subviews*](#subviews) for full documentation.
     ///
     /// **Panics** if `axis` is out of bounds.
-    pub fn axis_iter(&self, axis: Axis) -> OuterIter<A, D::Smaller>
+    ///
+    /// <img src="axis_iter.svg" height="250px">
+    pub fn axis_iter(&self, axis: Axis) -> AxisIter<A, D::Smaller>
         where D: RemoveAxis,
     {
         iterators::new_axis_iter(self.view(), axis.axis())
@@ -459,7 +471,7 @@ impl<A, S, D> ArrayBase<S, D> where S: Data<Elem=A>, D: Dimension
     /// (read-write array view).
     ///
     /// **Panics** if `axis` is out of bounds.
-    pub fn axis_iter_mut(&mut self, axis: Axis) -> OuterIterMut<A, D::Smaller>
+    pub fn axis_iter_mut(&mut self, axis: Axis) -> AxisIterMut<A, D::Smaller>
         where S: DataMut,
               D: RemoveAxis,
     {
@@ -848,26 +860,6 @@ impl<A, S, D> ArrayBase<S, D> where S: Data<Elem=A>, D: Dimension
         unsafe { Some(ArrayView::new_(self.ptr, dim, broadcast_strides)) }
     }
 
-    #[inline]
-    fn broadcast_unwrap<E>(&self, dim: E) -> ArrayView<A, E>
-        where E: Dimension,
-    {
-        #[cold]
-        #[inline(never)]
-        fn broadcast_panic<D, E>(from: &D, to: &E) -> !
-            where D: Dimension,
-                  E: Dimension,
-        {
-            panic!("ndarray: could not broadcast array from shape: {:?} to: {:?}",
-                   from.slice(), to.slice())
-        }
-
-        match self.broadcast(dim.clone()) {
-            Some(it) => it,
-            None => broadcast_panic(&self.dim, &dim),
-        }
-    }
-
     /// Swap axes `ax` and `bx`.
     ///
     /// This does not move any data, it just adjusts the array’s dimensions
@@ -1065,10 +1057,7 @@ impl<A, S, D> ArrayBase<S, D> where S: Data<Elem=A>, D: Dimension
     {
         if rhs.dim.ndim() == 0 {
             // Skip broadcast from 0-dim array
-            unsafe {
-                let rhs_elem = &*rhs.ptr;
-                self.zip_mut_with_elem(rhs_elem, f);
-            }
+            self.zip_mut_with_elem(rhs.get_0d(), f);
         } else if self.dim.ndim() == rhs.dim.ndim() && self.shape() == rhs.shape() {
             self.zip_mut_with_same_shape(rhs, f);
         } else {
@@ -1196,8 +1185,8 @@ impl<A, S, D> ArrayBase<S, D> where S: Data<Elem=A>, D: Dimension
     ///                    [-1., 2.]]);
     /// a.mapv_inplace(f32::exp);
     /// assert!(
-    ///     a.allclose(&arr2(&[[1.00000, 2.71828],
-    ///                        [0.36788, 7.38906]]), 1e-5)
+    ///     a.all_close(&arr2(&[[1.00000, 2.71828],
+    ///                         [0.36788, 7.38906]]), 1e-5)
     /// );
     /// ```
     pub fn mapv_inplace<F>(&mut self, f: F)

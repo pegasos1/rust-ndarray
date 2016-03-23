@@ -57,7 +57,7 @@ Status and Lookout
     or array view. Especially if it's a binary operation, which
     needs matching memory layout to be efficient (with some exceptions).
   + Arithmetic optimizes very well if the arrays are have contiguous inner dimension.
-  + The callback based methods like ``.map()``, ``.map_inplace()`` and
+  + The higher order functions like ``.map()``, ``.map_inplace()`` and
     ``.zip_mut_with()`` are the most efficient ways to
     perform single traversal and lock step traversal respectively.
   + ``.iter()`` is efficient for c-contiguous arrays.
@@ -97,6 +97,15 @@ How to use with cargo::
 
 Recent Changes (ndarray)
 ------------------------
+
+- 0.4.5
+
+  - Add ``.all_close()`` which replaces the now deprecated ``.allclose()``.
+    The new method has a stricter protocol: it panics if the array
+    shapes are not compatible. We don't want errors to pass silently.
+  - Add a new illustration to the doc for ``.axis_iter()``.
+  - Rename ``OuterIter, OuterIterMut`` to ``AxisIter, AxisIterMut``.
+    The old name is now deprecated.
 
 - 0.4.4
 
