@@ -513,6 +513,9 @@
 <span id="470">470</span>
 <span id="471">471</span>
 <span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2014-2016 bluss and ndarray developers.</span>
 <span class='comment'>//</span>
@@ -971,6 +974,9 @@
     <span class='kw'>let</span> <span class='ident'>s0</span> <span class='op'>=</span> <span class='ident'>a</span>.<span class='ident'>strides</span>()[<span class='number'>0</span>];
     <span class='kw'>let</span> <span class='ident'>s1</span> <span class='op'>=</span> <span class='ident'>a</span>.<span class='ident'>strides</span>()[<span class='number'>1</span>];
     <span class='kw'>if</span> <span class='ident'>s1</span> <span class='op'>!=</span> <span class='number'>1</span> {
+        <span class='kw'>return</span> <span class='boolval'>false</span>;
+    }
+    <span class='kw'>if</span> <span class='ident'>s0</span> <span class='op'>&lt;</span> <span class='number'>1</span> <span class='op'>||</span> <span class='ident'>s1</span> <span class='op'>&lt;</span> <span class='number'>1</span> {
         <span class='kw'>return</span> <span class='boolval'>false</span>;
     }
     <span class='kw'>if</span> (<span class='ident'>s0</span> <span class='op'>&gt;</span> <span class='ident'>blas_index</span>::<span class='ident'>max_value</span>() <span class='kw'>as</span> <span class='ident'>isize</span> <span class='op'>||</span> <span class='ident'>s0</span> <span class='op'>&lt;</span> <span class='ident'>blas_index</span>::<span class='ident'>min_value</span>() <span class='kw'>as</span> <span class='ident'>isize</span>) <span class='op'>||</span>
