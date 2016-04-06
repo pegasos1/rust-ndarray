@@ -7,7 +7,7 @@
     <meta name="description" content="API documentation for the Rust `RemoveAxis` trait in crate `ndarray`.">
     <meta name="keywords" content="rust, rustlang, rust-lang, RemoveAxis">
 
-    <title>ndarray 0.4.7 - ndarray::RemoveAxis - Rust</title>
+    <title>ndarray 0.4.8 - ndarray::RemoveAxis - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
@@ -48,7 +48,7 @@
                    </a>
                </span><a id='src-980' class='srclink' href='../src/ndarray/dimension.rs.html#636-639' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait RemoveAxis: <a class='trait' href='../ndarray/trait.Dimension.html' title='ndarray::Dimension'>Dimension</a> {
-    type Smaller: <a class='trait' href='../ndarray/trait.Dimension.html' title='ndarray::Dimension'>Dimension</a>;
+    type <a href='#associatedtype.Smaller' class='type'>Smaller</a>: <a class='trait' href='../ndarray/trait.Dimension.html' title='ndarray::Dimension'>Dimension</a>;
     fn <a href='#tymethod.remove_axis' class='fnname'>remove_axis</a>(&amp;self, axis: <a class='struct' href='../ndarray/struct.Axis.html' title='ndarray::Axis'>Axis</a>) -&gt; Self::<a class='trait' href='../ndarray/trait.RemoveAxis.html' title='ndarray::RemoveAxis'>Smaller</a>;
 }</pre><div class='docblock'><p>Array shape with a next smaller dimension.</p>
 
@@ -57,7 +57,7 @@ removing one axis from <em>Self</em> gives smaller dimension <em>Smaller</em>.</
 </div>
             <h2 id='associated-types'>Associated Types</h2>
             <div class='methods'>
-        <h3 id='associatedtype.Smaller' class='method stab '><code>type Smaller: <a class='trait' href='../ndarray/trait.Dimension.html' title='ndarray::Dimension'>Dimension</a></code></h3></div>
+        <h3 id='associatedtype.Smaller' class='method stab '><code>type <a href='#associatedtype.Smaller' class='type'>Smaller</a>: <a class='trait' href='../ndarray/trait.Dimension.html' title='ndarray::Dimension'>Dimension</a></code></h3></div>
             <h2 id='required-methods'>Required Methods</h2>
             <div class='methods'>
         <h3 id='tymethod.remove_axis' class='method stab '><code>fn <a href='#tymethod.remove_axis' class='fnname'>remove_axis</a>(&amp;self, axis: <a class='struct' href='../ndarray/struct.Axis.html' title='ndarray::Axis'>Axis</a>) -&gt; Self::<a class='trait' href='../ndarray/trait.RemoveAxis.html' title='ndarray::RemoveAxis'>Smaller</a></code></h3></div>

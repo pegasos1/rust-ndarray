@@ -559,6 +559,30 @@
 <span id="516">516</span>
 <span id="517">517</span>
 <span id="518">518</span>
+<span id="519">519</span>
+<span id="520">520</span>
+<span id="521">521</span>
+<span id="522">522</span>
+<span id="523">523</span>
+<span id="524">524</span>
+<span id="525">525</span>
+<span id="526">526</span>
+<span id="527">527</span>
+<span id="528">528</span>
+<span id="529">529</span>
+<span id="530">530</span>
+<span id="531">531</span>
+<span id="532">532</span>
+<span id="533">533</span>
+<span id="534">534</span>
+<span id="535">535</span>
+<span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
+<span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
 </pre><pre class='rust '>
 <span class='comment'>// Copyright 2014-2016 bluss and ndarray developers.</span>
 <span class='comment'>//</span>
@@ -658,18 +682,21 @@
             <span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>dot</span> {
                 (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ty</span>:<span class='ident'>ty</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>func</span>:<span class='ident'>ident</span>) <span class='op'>=&gt;</span> {{
             <span class='kw'>if</span> <span class='ident'>blas_compat_1d</span>::<span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ty</span>, _<span class='op'>&gt;</span>(<span class='self'>self</span>) <span class='op'>&amp;&amp;</span> <span class='ident'>blas_compat_1d</span>::<span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ty</span>, _<span class='op'>&gt;</span>(<span class='ident'>rhs</span>) {
-                <span class='kw'>let</span> <span class='ident'>n</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>len</span>() <span class='kw'>as</span> <span class='ident'>blas_index</span>;
-                <span class='kw'>let</span> <span class='ident'>incx</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>strides</span>()[<span class='number'>0</span>] <span class='kw'>as</span> <span class='ident'>blas_index</span>;
-                <span class='kw'>let</span> <span class='ident'>incy</span> <span class='op'>=</span> <span class='ident'>rhs</span>.<span class='ident'>strides</span>()[<span class='number'>0</span>] <span class='kw'>as</span> <span class='ident'>blas_index</span>;
-                <span class='kw'>let</span> <span class='ident'>ret</span> <span class='op'>=</span> <span class='kw'>unsafe</span> {
-                    <span class='ident'>blas_sys</span>::<span class='ident'>c</span>::<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>func</span>(
+                <span class='kw'>unsafe</span> {
+                    <span class='kw'>let</span> (<span class='ident'>lhs_ptr</span>, <span class='ident'>n</span>, <span class='ident'>incx</span>) <span class='op'>=</span> <span class='ident'>blas_1d_params</span>(<span class='self'>self</span>.<span class='ident'>ptr</span>,
+                                                            <span class='self'>self</span>.<span class='ident'>len</span>(),
+                                                            <span class='self'>self</span>.<span class='ident'>strides</span>()[<span class='number'>0</span>]);
+                    <span class='kw'>let</span> (<span class='ident'>rhs_ptr</span>, _, <span class='ident'>incy</span>) <span class='op'>=</span> <span class='ident'>blas_1d_params</span>(<span class='ident'>rhs</span>.<span class='ident'>ptr</span>,
+                                                            <span class='ident'>rhs</span>.<span class='ident'>len</span>(),
+                                                            <span class='ident'>rhs</span>.<span class='ident'>strides</span>()[<span class='number'>0</span>]);
+                    <span class='kw'>let</span> <span class='ident'>ret</span> <span class='op'>=</span> <span class='ident'>blas_sys</span>::<span class='ident'>c</span>::<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>func</span>(
                         <span class='ident'>n</span>,
-                        <span class='self'>self</span>.<span class='ident'>ptr</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw'>const</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ty</span>,
+                        <span class='ident'>lhs_ptr</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw'>const</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ty</span>,
                         <span class='ident'>incx</span>,
-                        <span class='ident'>rhs</span>.<span class='ident'>ptr</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw'>const</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ty</span>,
-                        <span class='ident'>incy</span>)
-                };
-                <span class='kw'>return</span> <span class='ident'>cast_as</span>::<span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ty</span>, <span class='ident'>A</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='ident'>ret</span>);
+                        <span class='ident'>rhs_ptr</span> <span class='kw'>as</span> <span class='op'>*</span><span class='kw'>const</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ty</span>,
+                        <span class='ident'>incy</span>);
+                    <span class='kw'>return</span> <span class='ident'>cast_as</span>::<span class='op'>&lt;</span><span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>ty</span>, <span class='ident'>A</span><span class='op'>&gt;</span>(<span class='kw-2'>&amp;</span><span class='ident'>ret</span>);
+                }
             }
                 }}
             }
@@ -678,6 +705,27 @@
             <span class='macro'>dot</span><span class='macro'>!</span>{<span class='ident'>f64</span>, <span class='ident'>cblas_ddot</span>};
         }
         <span class='self'>self</span>.<span class='ident'>dot_generic</span>(<span class='ident'>rhs</span>)
+    }
+}
+
+<span class='doccomment'>/// Return a pointer to the starting element in BLAS&#39;s view.</span>
+<span class='doccomment'>///</span>
+<span class='doccomment'>/// BLAS wants a pointer to the element with lowest address,</span>
+<span class='doccomment'>/// which agrees with our pointer for non-negative strides, but</span>
+<span class='doccomment'>/// is at the opposite end for negative strides.</span>
+<span class='attribute'>#[<span class='ident'>cfg</span>(<span class='ident'>feature</span><span class='op'>=</span><span class='string'>&quot;blas&quot;</span>)]</span>
+<span class='kw'>unsafe</span> <span class='kw'>fn</span> <span class='ident'>blas_1d_params</span><span class='op'>&lt;</span><span class='ident'>A</span><span class='op'>&gt;</span>(<span class='ident'>ptr</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>A</span>, <span class='ident'>len</span>: <span class='ident'>usize</span>, <span class='ident'>stride</span>: <span class='ident'>isize</span>)
+    <span class='op'>-&gt;</span> (<span class='op'>*</span><span class='kw'>const</span> <span class='ident'>A</span>, <span class='ident'>blas_index</span>, <span class='ident'>blas_index</span>)
+{
+    <span class='comment'>// [x x x x]</span>
+    <span class='comment'>//        ^--ptr</span>
+    <span class='comment'>//        stride = -1</span>
+    <span class='comment'>//  ^--blas_ptr = ptr + (len - 1) * stride</span>
+    <span class='kw'>if</span> <span class='ident'>stride</span> <span class='op'>&gt;=</span> <span class='number'>0</span> <span class='op'>||</span> <span class='ident'>len</span> <span class='op'>==</span> <span class='number'>0</span> {
+        (<span class='ident'>ptr</span>, <span class='ident'>len</span> <span class='kw'>as</span> <span class='ident'>blas_index</span>, <span class='ident'>stride</span> <span class='kw'>as</span> <span class='ident'>blas_index</span>)
+    } <span class='kw'>else</span> {
+        <span class='kw'>let</span> <span class='ident'>ptr</span> <span class='op'>=</span> <span class='ident'>ptr</span>.<span class='ident'>offset</span>((<span class='ident'>len</span> <span class='op'>-</span> <span class='number'>1</span>) <span class='kw'>as</span> <span class='ident'>isize</span> <span class='op'>*</span> <span class='ident'>stride</span>);
+        (<span class='ident'>ptr</span>, <span class='ident'>len</span> <span class='kw'>as</span> <span class='ident'>blas_index</span>, <span class='ident'>stride</span> <span class='kw'>as</span> <span class='ident'>blas_index</span>)
     }
 }
 
