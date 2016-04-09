@@ -1,7 +1,7 @@
 [package]
 
 name = "ndarray"
-version = "0.4.8"
+version = "0.5.0-alpha.0"
 authors = ["bluss"]
 license = "MIT/Apache-2.0"
 
@@ -40,18 +40,15 @@ blas-sys = { version = "0.6", optional = true, default-features = false }
 openblas-provider = { version = "0.4", optional = true, default-features = false }
 matrixmultiply = { version = "0.1.7" }
 
-# deprecated! use ndarray-rblas instead
-rblas = { version = "0.0.13", optional = true }
-
 [features]
-# deprecated! Will be default
-assign_ops = []
-
 blas = ["blas-sys"]
 
 # These features are used for testing
 blas-openblas-sys = ["blas"]
 test = ["blas-openblas-sys", "rustc-serialize"]
+
+# This feature is used for docs
+docs = ["rustc-serialize"]
 
 [profile.release]
 [profile.bench]

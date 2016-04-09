@@ -7,7 +7,7 @@
 // except according to those terms.
 
 use std::ops::Add;
-use libnum::{self, Float};
+use libnum::{self, Zero, Float};
 
 use imp_prelude::*;
 use numeric_util;
@@ -17,39 +17,11 @@ use {
     aview0,
 };
 
+/// Numerical methods for arrays.
 impl<A, S, D> ArrayBase<S, D>
     where S: Data<Elem=A>,
           D: Dimension,
 {
-    /// Return sum along `axis`.
-    ///
-    /// ```
-    /// use ndarray::{aview0, aview1, arr2, Axis};
-    ///
-    /// let a = arr2(&[[1., 2.],
-    ///                [3., 4.]]);
-    /// assert!(
-    ///     a.sum(Axis(0)) == aview1(&[4., 6.]) &&
-    ///     a.sum(Axis(1)) == aview1(&[3., 7.]) &&
-    ///
-    ///     a.sum(Axis(0)).sum(Axis(0)) == aview0(&10.)
-    /// );
-    /// ```
-    ///
-    /// **Panics** if `axis` is out of bounds.
-    pub fn sum(&self, axis: Axis) -> OwnedArray<A, <D as RemoveAxis>::Smaller>
-        where A: Clone + Add<Output=A>,
-              D: RemoveAxis,
-    {
-        let n = self.shape().axis(axis);
-        let mut res = self.subview(axis, 0).to_owned();
-        for i in 1..n {
-            let view = self.subview(axis, i);
-            res.iadd(&view);
-        }
-        res
-    }
-
     /// Return the sum of all elements in the array.
     ///
     /// ```
@@ -74,6 +46,35 @@ impl<A, S, D> ArrayBase<S, D>
             }
         }
         sum
+    }
+
+    /// Return sum along `axis`.
+    ///
+    /// ```
+    /// use ndarray::{aview0, aview1, arr2, Axis};
+    ///
+    /// let a = arr2(&[[1., 2.],
+    ///                [3., 4.]]);
+    /// assert!(
+    ///     a.sum(Axis(0)) == aview1(&[4., 6.]) &&
+    ///     a.sum(Axis(1)) == aview1(&[3., 7.]) &&
+    ///
+    ///     a.sum(Axis(0)).sum(Axis(0)) == aview0(&10.)
+    /// );
+    /// ```
+    ///
+    /// **Panics** if `axis` is out of bounds.
+    pub fn sum(&self, axis: Axis) -> OwnedArray<A, <D as RemoveAxis>::Smaller>
+        where A: Clone + Zero + Add<Output=A>,
+              D: RemoveAxis,
+    {
+        let n = self.shape().axis(axis);
+        let mut res = self.subview(axis, 0).to_owned();
+        for i in 1..n {
+            let view = self.subview(axis, i);
+            res = res + &view;
+        }
+        res
     }
 
     /// Return mean along `axis`.
@@ -116,21 +117,6 @@ impl<A, S, D> ArrayBase<S, D>
     {
         let rhs_broadcast = rhs.broadcast_unwrap(self.dim());
         self.iter().zip(rhs_broadcast.iter()).all(|(x, y)| (*x - *y).abs() <= tol)
-    }
-
-    #[cfg_attr(has_deprecated, deprecated(note=
-      "Replaced by .all_close() which has clearer error cases"))]
-    /// ***Deprecated: Replaced by .all_close()***
-    ///
-    /// Return `true` if the arrays' elementwise differences are all within
-    /// the given absolute tolerance.<br>
-    /// Return `false` otherwise, or if the shapes disagree.
-    pub fn allclose<S2>(&self, rhs: &ArrayBase<S2, D>, tol: A) -> bool
-        where A: Float,
-              S2: Data<Elem=A>,
-    {
-        self.shape() == rhs.shape() &&
-        self.iter().zip(rhs.iter()).all(|(x, y)| (*x - *y).abs() <= tol)
     }
 }
 

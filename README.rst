@@ -4,9 +4,10 @@ ndarray
 The ``ndarray`` crate provides an N-dimensional container for general elements
 and for numerics.  Requires Rust 1.7.
 
-Please read the `API documentation here (master)`__, `(0.3)`__, `(0.2)`__
+Please read the API documentation here: `(0.5.0-alpha / master)`__, `(0.4)`__, `(0.3)`__, `(0.2)`__
 
 __ http://bluss.github.io/rust-ndarray/
+__ http://bluss.github.io/rust-ndarray/0.4/
 __ http://bluss.github.io/rust-ndarray/0.3/
 __ http://bluss.github.io/rust-ndarray/0.2/
 
@@ -47,9 +48,7 @@ Status and Lookout
   + The crate is continuously developing, and breaking changes are expected
     during evolution from version to version. We adhere to semver,
     but alpha releases break at will.
-  + We adopt the newest stable rust features we need. In place methods like ``iadd``
-    *will be deprecated* when Rust supports ``+=`` and similar in Rust 1.8.
-  + We try to introduce more static checking gradually.
+  + We adopt the newest stable rust features we need.
 
 - Performance status:
 
@@ -69,11 +68,6 @@ Crate Feature Flags
 The following crate feature flags are available. They are configured in
 your `Cargo.toml`.
 
-- ``assign_ops``
-
-  - Requires Rust 1.8, will be default soon.
-  - Enables the compound assignment operators
-
 - ``rustc-serialize``
 
   - Optional, compatible with Rust stable
@@ -85,11 +79,6 @@ your `Cargo.toml`.
   - Enable transparent BLAS support for matrix multiplication. Pluggable
     backend via ``blas-sys``.
 
-- ``rblas``
-
-  - **Deprecated:** replaced by separate crate ``ndarray-rblas``
-  - Enables ``rblas`` integration
-
 How to use with cargo::
 
     [dependencies]
@@ -97,6 +86,17 @@ How to use with cargo::
 
 Recent Changes (ndarray)
 ------------------------
+
+- 0.5.0-alpha.0
+
+  - Requires Rust 1.8. Compound assignment operators are now enabled by default.
+  - Rename ``.mat_mul()`` to ``.dot()``. The same method name now handles
+    dot product and matrix multiplication.
+  - Remove deprecated items: raw_data, raw_data_mut, allclose, zeros, Array.
+    Docs for 0.4. lists the replacements.
+  - Remove deprecated crate features: rblas, assign_ops
+  - A few consuming arithmetic ops with ArrayViewMut were removed (this
+    was missed in the last version).
 
 - 0.4.8
 

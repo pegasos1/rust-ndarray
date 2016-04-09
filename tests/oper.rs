@@ -32,39 +32,37 @@ fn test_oper(op: &str, a: &[f32], b: &[f32], c: &[f32])
     test_oper_arr(op, aa.clone(), bb.clone(), cc.clone());
 }
 
-fn test_oper_arr<A: Float + fmt::Debug, D: ndarray::Dimension>
+fn test_oper_arr<A: NdFloat + fmt::Debug, D: ndarray::Dimension>
     (op: &str, mut aa: RcArray<A,D>, bb: RcArray<A, D>, cc: RcArray<A, D>)
 {
     match op {
         "+" => {
             assert_eq!(&aa + &bb, cc);
-            aa.iadd(&bb);
+            aa += &bb;
             assert_eq!(aa, cc);
         },
         "-" => {
             assert_eq!(&aa - &bb, cc);
-            aa.isub(&bb);
+            aa -= &bb;
             assert_eq!(aa, cc);
         },
         "*" => {
             assert_eq!(&aa * &bb, cc);
-            aa.imul(&bb);
+            aa *= &bb;
             assert_eq!(aa, cc);
         },
         "/" => {
             assert_eq!(&aa / &bb, cc);
-            aa.idiv(&bb);
+            aa /= &bb;
             assert_eq!(aa, cc);
         },
         "%" => {
             assert_eq!(&aa % &bb, cc);
-            aa.irem(&bb);
+            aa %= &bb;
             assert_eq!(aa, cc);
         },
         "neg" => {
             assert_eq!(-aa.clone(), cc);
-            aa.ineg();
-            assert_eq!(aa, cc);
         },
         _ => panic!()
     }
@@ -91,7 +89,7 @@ fn scalar_operations()
     {
         let mut x = a.clone();
         let mut y = arr0(0.);
-        x.iadd_scalar(&1.);
+        x += 1.;
         y.assign_scalar(&2.);
         assert_eq!(x, a + arr0(1.));
         assert_eq!(x, y);
@@ -100,7 +98,7 @@ fn scalar_operations()
     {
         let mut x = b.clone();
         let mut y = rcarr1(&[0., 0.]);
-        x.iadd_scalar(&1.);
+        x += 1.;
         y.assign_scalar(&2.);
         assert_eq!(x, b + arr0(1.));
         assert_eq!(x, y);
@@ -109,7 +107,7 @@ fn scalar_operations()
     {
         let mut x = c.clone();
         let mut y = RcArray::zeros((2, 2));
-        x.iadd_scalar(&1.);
+        x += 1.;
         y.assign_scalar(&2.);
         assert_eq!(x, c + arr0(1.));
         assert_eq!(x, y);
@@ -227,16 +225,16 @@ fn mat_mul() {
         let mut c = b.column_mut(0);
         c += 1.0;
     }
-    let ab = a.mat_mul(&b);
+    let ab = a.dot(&b);
 
     let mut af = OwnedArray::zeros_f(a.dim());
     let mut bf = OwnedArray::zeros_f(b.dim());
     af.assign(&a);
     bf.assign(&b);
 
-    assert_eq!(ab, a.mat_mul(&bf));
-    assert_eq!(ab, af.mat_mul(&b));
-    assert_eq!(ab, af.mat_mul(&bf));
+    assert_eq!(ab, a.dot(&bf));
+    assert_eq!(ab, af.dot(&b));
+    assert_eq!(ab, af.dot(&bf));
 
     let (m, n, k) = (10, 5, 11);
     let a = range_mat(m, n);
@@ -246,16 +244,16 @@ fn mat_mul() {
         let mut c = b.column_mut(0);
         c += 1.0;
     }
-    let ab = a.mat_mul(&b);
+    let ab = a.dot(&b);
 
     let mut af = OwnedArray::zeros_f(a.dim());
     let mut bf = OwnedArray::zeros_f(b.dim());
     af.assign(&a);
     bf.assign(&b);
 
-    assert_eq!(ab, a.mat_mul(&bf));
-    assert_eq!(ab, af.mat_mul(&b));
-    assert_eq!(ab, af.mat_mul(&bf));
+    assert_eq!(ab, a.dot(&bf));
+    assert_eq!(ab, af.dot(&b));
+    assert_eq!(ab, af.dot(&bf));
 
     let (m, n, k) = (10, 8, 1);
     let a = range_mat(m, n);
@@ -265,16 +263,16 @@ fn mat_mul() {
         let mut c = b.column_mut(0);
         c += 1.0;
     }
-    let ab = a.mat_mul(&b);
+    let ab = a.dot(&b);
 
     let mut af = OwnedArray::zeros_f(a.dim());
     let mut bf = OwnedArray::zeros_f(b.dim());
     af.assign(&a);
     bf.assign(&b);
 
-    assert_eq!(ab, a.mat_mul(&bf));
-    assert_eq!(ab, af.mat_mul(&b));
-    assert_eq!(ab, af.mat_mul(&bf));
+    assert_eq!(ab, a.dot(&bf));
+    assert_eq!(ab, af.dot(&b));
+    assert_eq!(ab, af.dot(&bf));
 }
 
 // Check that matrix multiplication of contiguous matrices returns a
@@ -289,8 +287,8 @@ fn mat_mul_order() {
     af.assign(&a);
     bf.assign(&b);
 
-    let cc = a.mat_mul(&b);
-    let ff = af.mat_mul(&bf);
+    let cc = a.dot(&b);
+    let ff = af.dot(&bf);
 
     assert_eq!(cc.strides()[1], 1);
     assert_eq!(ff.strides()[0], 1);
@@ -309,9 +307,9 @@ fn mat_mul_broadcast() {
     let b1 = b1.broadcast((n, k)).unwrap();
     let b2 = OwnedArray::from_elem((n, k), x1);
 
-    let c2 = a.mat_mul(&b2);
-    let c1 = a.mat_mul(&b1);
-    let c0 = a.mat_mul(&b0);
+    let c2 = a.dot(&b2);
+    let c1 = a.dot(&b1);
+    let c0 = a.dot(&b0);
     assert_eq!(c2, c1);
     assert_eq!(c2, c0);
 }
@@ -327,8 +325,8 @@ fn mat_mul_rev() {
     rev.assign(&b);
     println!("{:.?}", rev);
 
-    let c1 = a.mat_mul(&b);
-    let c2 = a.mat_mul(&rev);
+    let c1 = a.dot(&b);
+    let c2 = a.dot(&rev);
     assert_eq!(c1, c2);
 }
 

@@ -32,7 +32,7 @@ fn test_matmul_rcarray()
         *elt = i;
     }
 
-    let c = A.mat_mul(&B);
+    let c = A.dot(&B);
     println!("A = \n{:?}", A);
     println!("B = \n{:?}", B);
     println!("A x B = \n{:?}", c);
@@ -50,9 +50,9 @@ fn test_mat_mul() {
     let (n, m) = (45, 33);
     let a = RcArray::linspace(0., ((n * m) - 1) as f32, n as usize * m as usize ).reshape((n, m));
     let b = RcArray::eye(m);
-    assert_eq!(a.mat_mul(&b), a);
+    assert_eq!(a.dot(&b), a);
     let c = RcArray::eye(n);
-    assert_eq!(c.mat_mul(&a), a);
+    assert_eq!(c.dot(&a), a);
 }
 
 
@@ -606,7 +606,6 @@ fn slice_mut() {
                            [99, 5, 99]]));
 }
 
-#[cfg(feature = "assign_ops")]
 #[test]
 fn assign_ops()
 {
@@ -640,9 +639,10 @@ fn aview_mut() {
     let mut data = [0; 16];
     {
         let mut a = aview_mut1(&mut data).into_shape((4, 4)).unwrap();
-        a.slice_mut(&[Si(0, Some(2), 1), Si(0, None, 2)])
-         .iadd_scalar(&1);
-        println!("{}", a);
+        {
+            let mut slc = a.slice_mut(s![..2, ..;2]);
+            slc += 1;
+        }
     }
     assert_eq!(data, [1, 0, 1, 0,  1, 0, 1, 0,  0, 0, 0, 0,  0, 0, 0, 0]);
 }
