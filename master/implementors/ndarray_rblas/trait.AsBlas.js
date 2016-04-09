@@ -1,5 +1,5 @@
 (function() {var implementors = {};
-implementors['ndarray_rblas'] = [];implementors['ndarray_rblas'] = [];implementors['ndarray_rblas'] = [];implementors['ndarray_rblas'] = [];
+implementors['ndarray_rblas'] = [];
 
             if (window.register_implementors) {
                 window.register_implementors(implementors);

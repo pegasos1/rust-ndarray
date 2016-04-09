@@ -7,10 +7,11 @@
     <meta name="description" content="API documentation for the Rust `AsBlas` trait in crate `ndarray_rblas`.">
     <meta name="keywords" content="rust, rustlang, rust-lang, AsBlas">
 
-    <title>ndarray-rblas 0.1.0 - ndarray_rblas::AsBlas - Rust</title>
+    <title>0.1.0 - ndarray_rblas::AsBlas - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
+    
 
     
     
@@ -46,7 +47,7 @@
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-80' class='srclink' href='../src/ndarray_rblas/lib.rs.html#183-265' title='goto source code'>[src]</a></span></h1>
+               </span><a id='src-80' class='srclink' href='../src/ndarray_rblas/ndarray-rblas/src/lib.rs.html#183-265' title='goto source code'>[src]</a></span></h1>
 <pre class='rust trait'>pub trait AsBlas&lt;A, S, D&gt; {
     fn <a href='#tymethod.blas_checked' class='fnname'>blas_checked</a>(&amp;mut self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../ndarray_rblas/struct.BlasArrayViewMut.html' title='ndarray_rblas::BlasArrayViewMut'>BlasArrayViewMut</a>&lt;A, D&gt;, <a class='struct' href='../ndarray/error/struct.ShapeError.html' title='ndarray::error::ShapeError'>ShapeError</a>&gt; <span class='where'>where S: <a class='trait' href='../ndarray/data_traits/trait.DataOwned.html' title='ndarray::data_traits::DataOwned'>DataOwned</a> + <a class='trait' href='../ndarray/data_traits/trait.DataMut.html' title='ndarray::data_traits::DataMut'>DataMut</a>, A: <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a></span>;
     fn <a href='#tymethod.blas_view_checked' class='fnname'>blas_view_checked</a>(&amp;self) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../ndarray_rblas/struct.BlasArrayView.html' title='ndarray_rblas::BlasArrayView'>BlasArrayView</a>&lt;A, D&gt;, <a class='struct' href='../ndarray/error/struct.ShapeError.html' title='ndarray::error::ShapeError'>ShapeError</a>&gt; <span class='where'>where S: <a class='trait' href='../ndarray/data_traits/trait.Data.html' title='ndarray::data_traits::Data'>Data</a></span>;

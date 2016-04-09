@@ -1,5 +1,5 @@
 (function() {var implementors = {};
-implementors['ndarray_rand'] = [];implementors['ndarray_rand'] = [];implementors['ndarray_rand'] = [];
+implementors['ndarray_rand'] = [];
 
             if (window.register_implementors) {
                 window.register_implementors(implementors);
