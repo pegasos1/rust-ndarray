@@ -161,6 +161,8 @@ mod imp_prelude {
     pub struct Priv<T>(pub T);
 }
 
+pub mod prelude;
+
 /// Array index type
 pub type Ix = usize;
 /// Array index type (signed)
