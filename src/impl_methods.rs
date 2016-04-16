@@ -29,6 +29,7 @@ use {
     AxisIter,
     AxisIterMut,
 };
+use stacking::stack;
 
 impl<A, S, D> ArrayBase<S, D> where S: Data<Elem=A>, D: Dimension
 {
@@ -195,6 +196,8 @@ impl<A, S, D> ArrayBase<S, D> where S: Data<Elem=A>, D: Dimension
         }
         debug_assert!(self.pointer_is_inbounds());
     }
+
+    
 
     /// Return a reference to the element at `index`, or return `None`
     /// if the index is out of bounds.
@@ -619,7 +622,7 @@ impl<A, S, D> ArrayBase<S, D> where S: Data<Elem=A>, D: Dimension
     /// Return a pointer to the first element in the array.
     ///
     /// Raw access to array elements needs to follow the strided indexing
-    /// scheme: an element at multi-index *I* in an array with strides *S* is 
+    /// scheme: an element at multi-index *I* in an array with strides *S* is
     /// located at offset
     ///
     /// *Σ<sub>0 ≤ k < d</sub> I<sub>k</sub> × S<sub>k</sub>*

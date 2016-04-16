@@ -8,7 +8,6 @@
 
 use imp_prelude::*;
 use error::{ShapeError, ErrorKind, from_kind};
-
 /// Stack arrays along the given axis.
 ///
 /// ***Errors*** if the arrays have mismatching shapes, apart from along `axis`.
@@ -37,6 +36,7 @@ pub fn stack<'a, A, D>(axis: Axis, arrays: &[ArrayView<'a, A, D>])
     if arrays.len() == 0 {
         return Err(from_kind(ErrorKind::Unsupported));
     }
+
     let mut res_dim = arrays[0].dim();
     if axis.axis() >= res_dim.ndim() {
         return Err(from_kind(ErrorKind::OutOfBounds));
@@ -70,6 +70,7 @@ pub fn stack<'a, A, D>(axis: Axis, arrays: &[ArrayView<'a, A, D>])
     }
     Ok(res)
 }
+
 
 /// Stack arrays along the given axis.
 ///
