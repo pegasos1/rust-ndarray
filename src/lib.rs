@@ -6,7 +6,6 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 #![crate_name="ndarray"]
-#![cfg_attr(has_deprecated, feature(deprecated))]
 #![doc(html_root_url = "http://bluss.github.io/rust-ndarray/master/")]
 
 //! The `ndarray` crate provides an N-dimensional container for general elements
@@ -139,15 +138,8 @@ mod stacking;
 
 /// Implementation's prelude. Common types used everywhere.
 mod imp_prelude {
+    pub use prelude::*;
     pub use {
-        Axis,
-        ArrayBase,
-        ArrayView,
-        ArrayViewMut,
-        OwnedArray,
-        RcArray,
-        Ix, Ixs,
-        Dimension,
         RemoveAxis,
         Data,
         DataMut,
@@ -160,6 +152,8 @@ mod imp_prelude {
     #[derive(Copy, Clone, Debug)]
     pub struct Priv<T>(pub T);
 }
+
+pub mod prelude;
 
 /// Array index type
 pub type Ix = usize;

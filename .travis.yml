@@ -4,6 +4,9 @@ sudo: required
 dist: trusty
 matrix:
   include:
+    - rust: stable
+      env:
+       - FEATURES='test'
     - rust: beta
       env:
        - FEATURES='test'
@@ -14,6 +17,7 @@ matrix:
 branches:
   only:
     - master
+    - 0.4
 addons:
   apt:
     packages:

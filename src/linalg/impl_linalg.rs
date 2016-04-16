@@ -218,9 +218,9 @@ impl<A, S, S2> Dot<ArrayBase<S2, (Ix, Ix)>> for ArrayBase<S, (Ix, Ix)>
         let a = self.view();
         let b = b.view();
         let ((m, k), (k2, n)) = (a.dim(), b.dim());
-        let (lhs_columns, rhs_rows) = (k, k2);
-        assert!(lhs_columns == rhs_rows);
-        assert!(m.checked_mul(n).is_some());
+        if k != k2 || m.checked_mul(n).is_none() {
+            return dot_shape_error(m, k, k2, n);
+        }
 
         let lhs_s0 = a.strides()[0];
         let rhs_s0 = b.strides()[0];
@@ -241,6 +241,23 @@ impl<A, S, S2> Dot<ArrayBase<S2, (Ix, Ix)>> for ArrayBase<S, (Ix, Ix)>
     }
 }
 
+#[cold]
+#[inline(never)]
+fn dot_shape_error(m: usize, k: usize, k2: usize, n: usize) -> ! {
+    if m.checked_mul(n).is_none() {
+        panic!("ndarray: shape {} × {} overflows type range", m, n);
+    }
+    panic!("ndarray: inputs {} × {} and {} × {} are not compatible for matrix multiplication",
+           m, k, k2, n);
+}
+
+#[cold]
+#[inline(never)]
+fn general_dot_shape_error(m: usize, k: usize, k2: usize, n: usize, c1: usize, c2: usize) -> ! {
+    panic!("ndarray: inputs {} × {}, {} × {}, and output {} × {} are not compatible for matrix multiplication",
+           m, k, k2, n, c1, c2);
+}
+
 /// Perform the matrix multiplication of the rectangular array `self` and
 /// column vector `rhs`.
 ///
@@ -259,8 +276,9 @@ impl<A, S, S2> Dot<ArrayBase<S2, Ix>> for ArrayBase<S, (Ix, Ix)>
     fn dot(&self, rhs: &ArrayBase<S2, Ix>) -> OwnedArray<A, Ix>
     {
         let ((m, a), n) = (self.dim(), rhs.dim());
-        let (self_columns, other_rows) = (a, n);
-        assert!(self_columns == other_rows);
+        if a != n {
+            return dot_shape_error(m, a, n, 1);
+        }
 
         // Avoid initializing the memory in vec -- set it during iteration
         let mut res_elems = Vec::<A>::with_capacity(m as usize);
@@ -379,12 +397,12 @@ fn mat_mul_impl<A>(alpha: A,
                         m as blas_index, // m, rows of Op(a)
                         n as blas_index, // n, cols of Op(b)
                         k as blas_index, // k, cols of Op(a)
-                        1.0,                  // alpha
-                        lhs_.ptr as *const _, // a
+                        cast_as(&alpha),        // alpha
+                        lhs_.ptr as *const _,   // a
                         lhs_stride, // lda
-                        rhs_.ptr as *const _, // b
+                        rhs_.ptr as *const _,   // b
                         rhs_stride, // ldb
-                        0.0,                   // beta
+                        cast_as(&beta),         // beta
                         c_.ptr as *mut _,       // c
                         c_.strides()[0] as blas_index, // ldc
                     );
@@ -492,8 +510,9 @@ pub fn general_mat_mul<A, S1, S2, S3>(alpha: A,
 {
     let ((m, k), (k2, n)) = (a.dim(), b.dim());
     let (m2, n2) = c.dim();
-    assert!(k == k2);
-    assert!(m == m2 && n == n2);
+    if k != k2 || m != m2 || n != n2 {
+        return general_dot_shape_error(m, k, k2, n, m2, n2);
+    }
     mat_mul_impl(alpha, &a.view(), &b.view(), beta, &mut c.view_mut());
 }
 
